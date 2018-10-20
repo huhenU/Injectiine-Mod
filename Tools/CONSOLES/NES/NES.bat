@@ -9,7 +9,7 @@ cd Files
 echo ::::::::::::::::::::::::::
 echo ::INJECTIINE [NES] - Mod::
 echo ::::::::::::::::::::::::::
-SLEEP 3
+SLEEP 1
 
 :: CHECK THAT FILES EXIST
 
@@ -25,9 +25,15 @@ cd NES
 :BASE
 cls
 echo Which base do you want to use?
-echo Punch-Out!! [EUR]        (1)
-echo Duck Hunt [EUR]          (2)
-echo Base supplied from Files (3)
+echo Please note, that you should use a base that is close to the size of the game you are trying to inject,
+echo otherwise it might not work correctly.
+echo It's also recommended to use a base that is the same region as your game.
+echo.
+echo Punch-Out!! [EUR] [11.85 MB]       (1)
+echo Duck Hunt [EUR] [11.74 MB]         (2)
+echo Base supplied from Files [Custom]  (3)
+echo.
+echo Enter the number behind the base you want to use.
 echo.
 set /p BASEDECIDE=[Your Choice:] 
 IF %BASEDECIDE%==1 GOTO:PO
@@ -279,9 +285,9 @@ IF EXIST bootSound.wav (2>NUL del bootSound.wav)
 IF EXIST bootEdited.wav (2>NUL del bootEdited.wav)
 IF EXIST bootSound.btsnd (move bootSound.btsnd ../Tools/CONSOLES/NES/WORKDIR/meta/bootSound.btsnd)
 
-ren *.nes ROM.nes
+copy *.nes ROM.nes
 cd ..
-move Files\ROM.nes Tools\CONSOLES\NES\Injector\ROM.nes
+copy Files\ROM.nes Tools\CONSOLES\NES\Injector\ROM.nes
 cd Tools
 cd CONSOLES
 cd NES
@@ -291,7 +297,7 @@ cd Injector
 wiiurpxtool -d WUP-%BASEPDC%.rpx
 RetroInject.exe WUP-%BASEPDC%.rpx ROM.nes WUP-%BASEPDC%_new.rpx
 IF NOT EXIST WUP-%BASEPDC%_new.rpx GOTO:InjectError
-del /f /q WUP-%BASEPDC%.rpx
+copy /f /q WUP-%BASEPDC%.rpx
 ren WUP-%BASEPDC%_new.rpx WUP-%BASEPDC%.rpx
 wiiurpxtool -c WUP-%BASEPDC%.rpx
 del /f /q ROM.nes
@@ -506,23 +512,19 @@ png2tgacmd.exe -i iconTex.png --width=128 --height=128 --tga-bpp=32 --tga-compre
 png2tgacmd.exe -i bootTvTex.png --width=1280 --height=720 --tga-bpp=24 --tga-compression=none
 png2tgacmd.exe -i bootDrcTex.png --width=854 --height=480 --tga-bpp=24 --tga-compression=none
 IF EXIST bootLogoTex.png (png2tgacmd.exe -i bootLogoTex.png --width=170 --height=42 --tga-bpp=32 --tga-compression=none)
-title Injectiine [NES]
-del /f /q iconTex.png
-del /f /q bootTvTex.png
-del /f /q bootDrcTex.png
-del /f /q bootLogoTex.png
+title Injectiine [NES] - Mod
 MetaVerifiy.py
 cls
 echo Moving images to meta folder...
-move iconTex.tga ..\CONSOLES\NES\WORKDIR\meta
-move bootTvTex.tga ..\CONSOLES\NES\WORKDIR\meta
-move bootDrcTex.tga ..\CONSOLES\NES\WORKDIR\meta
+copy iconTex.tga ..\CONSOLES\NES\WORKDIR\meta
+copy bootTvTex.tga ..\CONSOLES\NES\WORKDIR\meta
+copy bootDrcTex.tga ..\CONSOLES\NES\WORKDIR\meta
 2>NUL move bootLogoTex.tga ..\CONSOLES\NES\WORKDIR\meta
 cls
 
 :PackPrompt
 cls
-echo Do you want to pack the game using NUSPacker?
+echo Do you want to pack the game using NUSPacker? This is recommended if you want to install the game to your Wii U.
 echo If you don't wish to, the game will be created in Loadiine format.
 set /p PACKDECIDE=[Y/N:] 
 IF /i "%PACKDECIDE%"=="n" (GOTO:LoadiinePack)
@@ -571,9 +573,7 @@ echo A folder has been created named
 IF /i "%PACKDECIDE%"=="y" echo "[NES] %GAMENAME% (000500001337%TITLEID%)"
 IF /i "%PACKDECIDE%"=="n" echo "[NES] %GAMENAME% [%PRODUCTCODE%]"
 echo in the Output directory with the injected game. You can install this using
-echo WUP Installer GX2, WUP Installer Y Mod or System Config Tool.
-echo.
-echo It is recommended to install to USB in case of game corruption.
+echo WUP Installer GX2
 echo.
 echo Press any key to exit.
 pause>NUL

@@ -1,14 +1,14 @@
 @echo off
-title Injectiine [SNES]
+title Injectiine [SNES] - Mod
 cls
 cd ..
 cd ..
 cd ..
 cd Files
 
-echo :::::::::::::::::::::
-echo ::INJECTIINE [SNES]::
-echo :::::::::::::::::::::
+echo :::::::::::::::::::::::::::
+echo ::INJECTIINE [SNES] - Mod::
+echo :::::::::::::::::::::::::::
 SLEEP 3
 
 :: CHECK THAT FILES EXIST
@@ -30,8 +30,8 @@ cls
 start snesROMUtil.exe
 echo snesROMUtil has been automatically opened.
 echo.
-echo It is recommended that you run snesROMUtil to check if the ROM is
-echo LoROM or HiROM, and if it needs the header removed or not.
+echo Please Open your rom and check if it is a LoRom or HiRom and if it needs the header removed.
+echo After that, you can close it again, and continue here.
 echo.
 echo Press any key to continue.
 pause>NUL
@@ -39,12 +39,19 @@ pause>NUL
 :BASE
 cls
 echo Which base do you want to use?
-echo Super Metroid            (1) [HiROM]
-echo Donkey Kong Country      (2) [LoROM]
-echo Super Mario Kart         (3) [HiROM]
-echo Earthbound               (4) [HiROM]
-echo Kirby's Dream Land 3     (5) [LoROM/SA-1]
-echo Base supplied from Files (6)
+echo Enter the number behind the base you want to use.
+echo Please note, that you should use a base that is close to the size of the game you are trying to inject,
+echo otherwise it might not work correctly.
+echo It's also recommended to use a base that is the same region as your game.
+echo.
+echo For SNES games it's important to chose the same rom-type (Hi/Lo) as your game!
+echo.
+echo Super Metroid [17.82 MB]           (1) [HiROM]
+echo Donkey Kong Country [17.74 MB]     (2) [LoROM]
+echo Super Mario Kart [15.59 MB]        (3) [HiROM]
+echo Earthbound [18.64 MB]              (4) [HiROM]
+echo Kirby's Dream Land 3 [17.51 MB]    (5) [LoROM/SA-1]
+echo Base supplied from Files [Custom]  (6) [Custom]
 echo.
 set /p BASEDECIDE=[Your Choice:] 
 IF %BASEDECIDE%==1 GOTO:SM
@@ -612,7 +619,7 @@ cls
 
 :PackPrompt
 cls
-echo Do you want to pack the game using NUSPacker?
+echo Do you want to pack the game using NUSPacker? This is recommended if you want to install the game to your Wii U.
 echo If you don't wish to, the game will be created in Loadiine format.
 set /p PACKDECIDE=[Y/N:] 
 IF /i "%PACKDECIDE%"=="n" (GOTO:LoadiinePack)
@@ -661,9 +668,7 @@ echo A folder has been created named
 IF /i "%PACKDECIDE%"=="y" echo "[SNES] %GAMENAME% (000500001337%TITLEID%)"
 IF /i "%PACKDECIDE%"=="n" echo "[SNES] %GAMENAME% [%PRODUCTCODE%]"
 echo in the Output directory with the injected game. You can install this using
-echo WUP Installer GX2, WUP Installer Y Mod or System Config Tool.
-echo.
-echo It is recommended to install to USB in case of game corruption.
+echo WUP Installer GX2.
 echo.
 echo Press any key to exit.
 pause>NUL

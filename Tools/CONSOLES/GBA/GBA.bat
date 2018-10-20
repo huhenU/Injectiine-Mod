@@ -9,7 +9,7 @@ cd Files
 echo ::::::::::::::::::::
 echo ::INJECTIINE [GBA]::
 echo ::::::::::::::::::::
-SLEEP 3
+SLEEP 1
 
 :: CHECK THAT FILES EXIST
 
@@ -32,9 +32,15 @@ cls
 :BASE
 cls
 echo Which base do you want to use?
-echo The Legend of Zelda: The Minish Cap [EUR] (1)
-echo Mario and Luigi: Superstar Saga [EUR]     (2)
-echo Base supplied from Files                  (3)
+echo Please note, that you should use a base that is close to the size of the game you are trying to inject,
+echo otherwise it might not work correctly.
+echo It's also recommended to use a base that is the same region as your game.
+echo.
+echo The Legend of Zelda: The Minish Cap [EUR] [47.71 MB]      (1)
+echo Mario and Luigi: Superstar Saga [EUR]     [59.22 MB]      (2)
+echo Base supplied from Files                  [Custom]        (3)
+echo.
+echo Pick the number behind the base you want to use.
 echo.
 set /p BASEDECIDE=[Your Choice:] 
 IF %BASEDECIDE%==1 GOTO:Zelda
@@ -153,7 +159,7 @@ echo.
 GOTO:RestOfParameters
 
 :LINE2
-echo Enter a short version of the name of the game.
+echo Enter a short version of the name of the game. This will be shown in the home-button-pause menu.
 set /p GAMENAME=[Short Game Name:] 
 echo.
 
@@ -201,7 +207,6 @@ IF EXIST WORKDIR rd /s /q WORKDIR
 SLEEP 1
 cd JNUSTool
 echo Downloading base files...
-rmdir /s /q %BASEFOLDER%
 java -jar JNUSTool.jar %BASEID% %TITLEKEY% -file /code/.*
 java -jar JNUSTool.jar %BASEID% %TITLEKEY% -file /content/.*
 java -jar JNUSTool.jar %BASEID% %TITLEKEY% -file /meta/Manual.bfma
@@ -232,22 +237,20 @@ cd ..
 cd ..
 cd ..
 cd Files
-IF EXIST iconTex.png (move iconTex.png ../Tools/png2tga)
+IF EXIST iconTex.png (copy iconTex.png ../Tools/png2tga)
 IF NOT EXIST bootDrcTex.png (copy bootTvTex.png bootDrcTex.png)
-IF EXIST bootTvTex.png (move bootTvTex.png ../Tools/png2tga)
-IF EXIST bootDrcTex.png (move bootDrcTex.png ../Tools/png2tga)
-IF EXIST bootLogoTex.png (move bootLogoTex.png ../Tools/png2tga)
+IF EXIST bootTvTex.png (copy bootTvTex.png ../Tools/png2tga)
+IF EXIST bootDrcTex.png (copy bootDrcTex.png ../Tools/png2tga)
+IF EXIST bootLogoTex.png (copy bootLogoTex.png ../Tools/png2tga)
 
 IF EXIST bootSound.wav echo bootSound detected. Do you want it to loop?
 IF EXIST bootSound.wav set /p AUDIODECIDE=[Y/N:]
 IF /i "%AUDIODECIDE%"=="n" set LOOP=-noLoop
 IF EXIST bootSound.wav ..\Tools\sox\sox.exe .\bootSound.wav -b 16 bootEdited.wav channels 2 rate 48k trim 0 6
 IF EXIST bootEdited.wav ..\Tools\wav2btsnd.jar -in bootEdited.wav -out bootSound.btsnd %LOOP%
-IF EXIST bootSound.wav (2>NUL del bootSound.wav)
-IF EXIST bootEdited.wav (2>NUL del bootEdited.wav)
-IF EXIST bootSound.btsnd (move bootSound.btsnd ../Tools/CONSOLES/NES/WORKDIR/meta/bootSound.btsnd)
+IF EXIST bootSound.btsnd (copy bootSound.btsnd ../Tools/CONSOLES/NES/WORKDIR/meta/bootSound.btsnd)
 
-ren *.gba ROM.gba
+copy *.gba ROM.gba
 cd ..
 move Files\ROM.gba Tools\CONSOLES\GBA\Injector\ROM.gba
 cd Tools

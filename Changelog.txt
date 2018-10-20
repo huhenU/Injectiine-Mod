@@ -4,6 +4,8 @@ v1.23 [huhen-mod v01] (20/10/18)
 -Added more information on base-picker
 -Revamped readme.txt
 -Stopped it from deleting files when Inject finished
+-Added more information to make Injectiine easier to use for un-experienced users
+-Removed false information
 
 v1.23 (18/12/17)
 -Added option to use custom backgrounds for GamePad/TV (NDS only)

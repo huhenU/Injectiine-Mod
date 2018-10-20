@@ -1,14 +1,14 @@
 @echo off
-title Injectiine [N64]
+title Injectiine [N64] - Mod
 cls
 cd ..
 cd ..
 cd ..
 cd Files
 
-echo ::::::::::::::::::::
-echo ::INJECTIINE [N64]::
-echo ::::::::::::::::::::
+echo ::::::::::::::::::::::::::
+echo ::INJECTIINE [N64] - Mod::
+echo ::::::::::::::::::::::::::
 SLEEP 3
 
 :: CHECK THAT FILES EXIST
@@ -27,9 +27,15 @@ cd N64
 :BASE
 cls
 echo Which base do you want to use?
-echo Excitebike 64 [USA]      (1)
-echo Donkey Kong 64 [EUR]     (2)
-echo Base supplied from Files (3)
+echo Please note, that you should use a base that is close to the size of the game you are trying to inject,
+echo otherwise it might not work correctly.
+echo It's also recommended to use a base that is the same region as your game.
+echo.
+echo Excitebike 64 [USA] [11.58 MB]     (1)
+echo Donkey Kong 64 [EUR] [52.72 MB]    (2)
+echo Base supplied from Files [Custom]  (3)
+echo.
+echo Pick the number behind the base you want to use
 echo.
 set /p BASEDECIDE=[Your Choice:] 
 IF %BASEDECIDE%==1 GOTO:EB
@@ -150,7 +156,7 @@ echo.
 GOTO:RestOfParameters
 
 :LINE2
-echo Enter a short version of the name of the game.
+echo Enter a short version of the name of the game. This will be shown in the home-button-pause menu.
 set /p GAMENAME=[Short Game Name:] 
 echo.
 
@@ -172,7 +178,7 @@ echo If you don't, one will be randomly assigned.
 set /p TITLEDECIDE=[Y/N:] 
 echo.
 IF /i "%TITLEDECIDE%"=="y" (
-echo Enter a 4-digit meta title ID. Must only be hex values.
+echo Enter a 4-digit meta title ID. Must only be hex values. This can be anything.
 set /p TITLEID=[0-F:] 
 )
 cls
@@ -208,11 +214,6 @@ cd ..
 IF NOT EXIST WORKDIR GOTO:ROBOFAIL
 cd WORKDIR
 cd content
-rmdir /s /q rom
-rmdir /s /q config
-mkdir rom
-mkdir config
-mkdir Patch
 cd ..
 cd ..
 cls
@@ -246,9 +247,6 @@ C:\Windows\System32\Robocopy.exe ..\..\..\Files\Base WORKDIR\ /MIR
 IF NOT EXIST WORKDIR GOTO:ROBOFAIL
 cd WORKDIR
 cd content
-rmdir /s /q rom
-rmdir /s /q config
-rmdir /s /q Patch
 mkdir rom
 mkdir config
 mkdir Patch
@@ -263,26 +261,24 @@ cd ..
 cd ..
 cd ..
 cd Files
-IF EXIST iconTex.png (move iconTex.png ../Tools/png2tga)
+IF EXIST iconTex.png (copy iconTex.png ../Tools/png2tga)
 IF NOT EXIST bootDrcTex.png (copy bootTvTex.png bootDrcTex.png)
-IF EXIST bootTvTex.png (move bootTvTex.png ../Tools/png2tga)
-IF EXIST bootDrcTex.png (move bootDrcTex.png ../Tools/png2tga)
-IF EXIST bootLogoTex.png (move bootLogoTex.png ../Tools/png2tga)
+IF EXIST bootTvTex.png (copy bootTvTex.png ../Tools/png2tga)
+IF EXIST bootDrcTex.png (copy bootDrcTex.png ../Tools/png2tga)
+IF EXIST bootLogoTex.png (copy bootLogoTex.png ../Tools/png2tga)
 
 IF EXIST bootSound.wav echo bootSound detected. Do you want it to loop?
 IF EXIST bootSound.wav set /p AUDIODECIDE=[Y/N:]
 IF /i "%AUDIODECIDE%"=="n" set LOOP=-noLoop
 IF EXIST bootSound.wav ..\Tools\sox\sox.exe .\bootSound.wav -b 16 bootEdited.wav channels 2 rate 48k trim 0 6
 IF EXIST bootEdited.wav ..\Tools\wav2btsnd.jar -in bootEdited.wav -out bootSound.btsnd %LOOP%
-IF EXIST bootSound.wav (2>NUL del bootSound.wav)
-IF EXIST bootEdited.wav (2>NUL del bootEdited.wav)
-IF EXIST bootSound.btsnd (move bootSound.btsnd ../Tools/CONSOLES/NES/WORKDIR/meta/bootSound.btsnd)
+IF EXIST bootSound.btsnd (copy bootSound.btsnd ../Tools/CONSOLES/NES/WORKDIR/meta/bootSound.btsnd)
 
-IF EXIST *.z64 ren *.z64 ROM.z64
+IF EXIST *.z64 copy *.z64 ROM.z64
 IF EXIST *.n64 java -jar ../Tools/CONSOLES/N64/N64Converter.jar -i *.n64 -o ROM.z64
 IF EXIST *.v64 java -jar ../Tools/CONSOLES/N64/N64Converter.jar -i *.v64 -o ROM.z64
-2>NUL del *.n64
-2>NUL del *.v64
+2>NUL del ROM.n64
+2>NUL del ROM.v64
 cd ..
 move Files\ROM.z64 Tools\CONSOLES\N64\WORKDIR\content\rom\%BASEINI%
 cd Tools
@@ -307,6 +303,8 @@ echo Custom config .ini   (5)
 echo Blank config .ini    (6)
 echo Base config .ini     (7)
 echo .INI file from Files (8)
+echo.
+echo Pick the number behind the config.ini you want to use
 echo.
 set /p BASEDECIDE=[Your Choice:] 
 IF %BASEDECIDE%==1 GOTO:SM64UCOPY
@@ -704,23 +702,19 @@ png2tgacmd.exe -i iconTex.png --width=128 --height=128 --tga-bpp=32 --tga-compre
 png2tgacmd.exe -i bootTvTex.png --width=1280 --height=720 --tga-bpp=24 --tga-compression=none
 png2tgacmd.exe -i bootDrcTex.png --width=854 --height=480 --tga-bpp=24 --tga-compression=none
 IF EXIST bootLogoTex.png (png2tgacmd.exe -i bootLogoTex.png --width=170 --height=42 --tga-bpp=32 --tga-compression=none)
-title Injectiine [N64]
-del /f /q iconTex.png
-del /f /q bootTvTex.png
-del /f /q bootDrcTex.png
-del /f /q bootLogoTex.png
+title Injectiine [N64] - Mod
 MetaVerifiy.py
 cls
 echo Moving images to meta folder...
 move iconTex.tga ..\CONSOLES\N64\WORKDIR\meta
 move bootTvTex.tga ..\CONSOLES\N64\WORKDIR\meta
 move bootDrcTex.tga ..\CONSOLES\N64\WORKDIR\meta
-2>NUL move bootLogoTex.tga ..\CONSOLES\N64\WORKDIR\meta
+2>NUL copy bootLogoTex.tga ..\CONSOLES\N64\WORKDIR\meta
 cls
 
 :PackPrompt
 cls
-echo Do you want to pack the game using NUSPacker?
+echo Do you want to pack the game using NUSPacker? This is recommended if you want to install it to your wiiu.
 echo If you don't wish to, the game will be created in Loadiine format.
 set /p PACKDECIDE=[Y/N:] 
 IF /i "%PACKDECIDE%"=="n" (GOTO:LoadiinePack)
@@ -769,9 +763,7 @@ echo A folder has been created named
 IF /i "%PACKDECIDE%"=="y" echo "[N64] %GAMENAME% (000500001337%TITLEID%)"
 IF /i "%PACKDECIDE%"=="n" echo "[N64] %GAMENAME% [%PRODUCTCODE%]"
 echo in the Output directory with the injected game. You can install this using
-echo WUP Installer GX2, WUP Installer Y Mod or System Config Tool.
-echo.
-echo It is recommended to install to USB in case of game corruption.
+echo WUP Installer GX2.
 echo.
 echo Press any key to exit.
 pause>NUL

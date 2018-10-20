@@ -36,7 +36,7 @@ echo New Super Mario Bros. [USA] [29.95 MB]   (5)
 echo New Super Mario Bros. [EUR] [32.82 MB]   (6)
 echo Base supplied from Files [Custom]        (7)
 echo.
-echo Pick the number behind your base
+echo Pick the number behind the base you want to use
 echo.
 set /p BASEDECIDE=[Your Choice:] 
 IF %BASEDECIDE%==1 GOTO:BA
@@ -367,8 +367,7 @@ IF EXIST bootSound.wav ..\Tools\sox\sox.exe .\bootSound.wav -b 16 bootEdited.wav
 IF EXIST bootEdited.wav ..\Tools\wav2btsnd.jar -in bootEdited.wav -out bootSound.btsnd %LOOP%
 IF EXIST bootSound.btsnd (xcopy /y bootSound.btsnd ../Tools/CONSOLES/NES/WORKDIR/meta/bootSound.btsnd)
 
-ren *.nds ROM.nds
-2>NUL ren *.srl ROM.nds
+copy *.nds ROM.nds
 cd ..
 copy Files\ROM.nds Tools\CONSOLES\NDS\7za\WUP-N-%BASEPDC%.srl
 cd Tools
@@ -385,7 +384,7 @@ cd 7za
 del /s WUP-N-%BASEPDC%.srl >nul 2>&1
 cd ..
 copy fnr.exe WORKDIR\fnr.exe
-move 7za\rom.zip WORKDIR\content\0010\rom.zip
+copy 7za\rom.zip WORKDIR\content\0010\rom.zip
 cls
 
 :: EDITING CONFIGURATION_CAFE.JSON AND APP.XML AND META.XML
@@ -623,13 +622,13 @@ echo Moving images to meta folder...
 xcopy /y iconTex.tga ..\CONSOLES\NDS\WORKDIR\meta
 xcopy /y bootTvTex.tga ..\CONSOLES\NDS\WORKDIR\meta
 xcopy /y bootDrcTex.tga ..\CONSOLES\NDS\WORKDIR\meta
-2>NUL move bootLogoTex.tga ..\CONSOLES\NDS\WORKDIR\meta
+2>NUL copy bootLogoTex.tga ..\CONSOLES\NDS\WORKDIR\meta
 del ..\CONSOLES\NDS\WORKDIR\fnr.exe
 cls
 
 :PackPrompt
 cls
-echo Do you want to pack the game using NUSPacker?
+echo Do you want to pack the game using NUSPacker? This is recommended if you want to install the game to your Wii U.
 echo This is recommended if you want to install the game to your Wii U.
 echo If you don't wish to, the game will be created in Loadiine format.
 echo.
