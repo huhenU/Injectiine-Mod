@@ -40,8 +40,6 @@ echo The Legend of Zelda: The Minish Cap [EUR] [47.71 MB]      (1)
 echo Mario and Luigi: Superstar Saga [EUR]     [59.22 MB]      (2)
 echo Base supplied from Files                  [Custom]        (3)
 echo.
-echo Pick the number behind the base you want to use.
-echo.
 set /p BASEDECIDE=[Your Choice:] 
 IF %BASEDECIDE%==1 GOTO:Zelda
 IF %BASEDECIDE%==2 GOTO:MLSS
@@ -95,7 +93,7 @@ cls
 
 IF EXIST TitleKeyMLSS.txt goto:EnterCommon
 echo This step will not be required the next time you start Injectiine.
-echo Enter the title key for Mario and Luigi: Superstar Saga (EUR):
+echo Enter the title key for Mario & Luigi: Superstar Saga (EUR):
 set /p TITLEKEY=
 echo %TITLEKEY:~0,32%>TitleKeyMLSS.txt
 set /p TITLEKEY=<TitleKeyMLSS.txt
@@ -159,7 +157,7 @@ echo.
 GOTO:RestOfParameters
 
 :LINE2
-echo Enter a short version of the name of the game. This will be shown in the home-button-pause menu.
+echo Enter a short version of the name of the game.
 set /p GAMENAME=[Short Game Name:] 
 echo.
 
@@ -207,6 +205,7 @@ IF EXIST WORKDIR rd /s /q WORKDIR
 SLEEP 1
 cd JNUSTool
 echo Downloading base files...
+rmdir /s /q %BASEFOLDER%
 java -jar JNUSTool.jar %BASEID% %TITLEKEY% -file /code/.*
 java -jar JNUSTool.jar %BASEID% %TITLEKEY% -file /content/.*
 java -jar JNUSTool.jar %BASEID% %TITLEKEY% -file /meta/Manual.bfma
@@ -228,6 +227,7 @@ cls
 echo Moving base to work directory...
 C:\Windows\System32\Robocopy.exe ..\..\..\Files\Base WORKDIR\ /MIR
 IF NOT EXIST WORKDIR GOTO:ROBOFAIL
+rmdir /s /q ..\..\..\Files\Base
 cls
 
 :: INJECTING ROM
@@ -252,7 +252,7 @@ IF EXIST bootSound.btsnd (copy bootSound.btsnd ../Tools/CONSOLES/NES/WORKDIR/met
 
 copy *.gba ROM.gba
 cd ..
-copy Files\ROM.gba Tools\CONSOLES\GBA\Injector\ROM.gba
+move Files\ROM.gba Tools\CONSOLES\GBA\Injector\ROM.gba
 cd Tools
 cd CONSOLES
 cd GBA
@@ -260,6 +260,9 @@ move WORKDIR\content\alldata.bin Injector\alldata.bin
 move WORKDIR\content\alldata.psb.m Injector\alldata.psb.m
 cd Injector
 "C:\Python34\python" "inject_gba\inject_gba.py" --inpsb "alldata.psb.m" --inrom "ROM.gba" --outpsb "out/alldata.psb.m"
+del /f /q ROM.gba
+del /f /q alldata.bin
+del /f /q alldata.psb.m
 move out\alldata.bin ..\WORKDIR\content\alldata.bin
 move out\alldata.psb.m ..\WORKDIR\content\alldata.psb.m
 cls
@@ -472,19 +475,23 @@ png2tgacmd.exe -i iconTex.png --width=128 --height=128 --tga-bpp=32 --tga-compre
 png2tgacmd.exe -i bootTvTex.png --width=1280 --height=720 --tga-bpp=24 --tga-compression=none
 png2tgacmd.exe -i bootDrcTex.png --width=854 --height=480 --tga-bpp=24 --tga-compression=none
 IF EXIST bootLogoTex.png (png2tgacmd.exe -i bootLogoTex.png --width=170 --height=42 --tga-bpp=32 --tga-compression=none)
-title Injectiine [GBA] - Mod
+title Injectiine [GBA]
+del /f /q iconTex.png
+del /f /q bootTvTex.png
+del /f /q bootDrcTex.png
+del /f /q bootLogoTex.png
 MetaVerifiy.py
 cls
 echo Moving images to meta folder...
-copy iconTex.tga ..\CONSOLES\GBA\WORKDIR\meta
-copy bootTvTex.tga ..\CONSOLES\GBA\WORKDIR\meta
-copy bootDrcTex.tga ..\CONSOLES\GBA\WORKDIR\meta
-2>NUL copy bootLogoTex.tga ..\CONSOLES\GBA\WORKDIR\meta
+move iconTex.tga ..\CONSOLES\GBA\WORKDIR\meta
+move bootTvTex.tga ..\CONSOLES\GBA\WORKDIR\meta
+move bootDrcTex.tga ..\CONSOLES\GBA\WORKDIR\meta
+2>NUL move bootLogoTex.tga ..\CONSOLES\GBA\WORKDIR\meta
 cls
 
 :PackPrompt
 cls
-echo Do you want to pack the game using NUSPacker? This is recommended if you want to install it to your Wii U.
+echo Do you want to pack the game using NUSPacker?
 echo If you don't wish to, the game will be created in Loadiine format.
 set /p PACKDECIDE=[Y/N:] 
 IF /i "%PACKDECIDE%"=="n" (GOTO:LoadiinePack)
@@ -510,7 +517,7 @@ java -jar NUSPacker.jar -in WORKDIR -out "[GBA] %GAMENAME% (000500001337%TITLEID
 rd /s /q tmp
 rd /s /q WORKDIR
 rd /s /q output
-copy "[GBA] %GAMENAME% (000500001337%TITLEID%)" ..\..\..\..\Output
+move "[GBA] %GAMENAME% (000500001337%TITLEID%)" ..\..\..\..\Output
 
 :: Final check if game exists
 :FinalCheck
@@ -535,7 +542,14 @@ IF /i "%PACKDECIDE%"=="n" echo "[GBA] %GAMENAME% [%PRODUCTCODE%]"
 echo in the Output directory with the injected game. You can install this using
 echo WUP Installer GX2.
 echo.
-echo Press any key to exit.
+echo Do you want to delete the files inside the Files directory? This will delete your Rom, Images, Base!
+echo.
+echo 1 = Yes
+echo 2 = No
+echo.
+set /p DELDECIDE=[Your Choice:]
+IF %DELDECIDE%==1 GOTO:DELF
+IF %DELDECIDE%==2 GOTO:NDELF
 pause>NUL
 exit
 
@@ -615,4 +629,15 @@ echo Internet connection test failed.
 echo.
 echo Aborting in five seconds.
 SLEEP 5
+exit
+
+:DELF
+cd ..\
+del /s /f /q Files\* 
+clear
+echo Closing in five seconds
+SLEEP 5
+exit
+
+:NDELF
 exit
