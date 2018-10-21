@@ -8,11 +8,11 @@ echo :::::::::::::::::::::::::::::
 echo.
 echo Please select the console of the game you want to inject.
 echo.
-echo Nintend Entertainment System        (1)
-echo Super Nintendo Entertainment System (2)
-echo Nintendo 64                         (3)
-echo Gameboy Advance                     (4)
-echo Nintendo DS                         (5)
+echo Nintendo Entertainment System        (1)
+echo Super Nintendo Entertainment System  (2)
+echo Nintendo 64                          (3)
+echo Gameboy Advance                      (4)
+echo Nintendo DS                          (5)
 echo.
 echo Pick the number behind your console
 echo.
