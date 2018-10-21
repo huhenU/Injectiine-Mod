@@ -681,7 +681,13 @@ IF /i "%PACKDECIDE%"=="n" echo "[NDS] %GAMENAME% [%PRODUCTCODE%]"
 echo in the Output directory with the injected game. You can install this using
 echo WUP Installer GX2.
 echo.
-echo Press any key to exit.
+echo Do you want to delete the files in the Files directory? This will not delete the Base!
+echo.
+echo 1 = Yes
+echo 2 = No
+set /p DELDECIDE=[Your Choice:]
+IF %DELDECIDE%==1 GOTO:DELF
+IF %DELDECIDE%==2 GOTO:NDELF
 pause>NUL
 exit
 
@@ -763,5 +769,18 @@ echo.
 echo Internet connection test failed.
 echo.
 echo Aborting in five seconds.
+SLEEP 5
+exit
+
+:DELF
+cd ..\
+del /s /f /q Files\* 
+clear
+echo Closing in five seconds
+SLEEP 5
+exit
+
+:NDELF
+Closing in five seconds
 SLEEP 5
 exit
