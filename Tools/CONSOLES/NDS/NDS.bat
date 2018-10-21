@@ -681,8 +681,7 @@ IF /i "%PACKDECIDE%"=="n" echo "[NDS] %GAMENAME% [%PRODUCTCODE%]"
 echo in the Output directory with the injected game. You can install this using
 echo WUP Installer GX2.
 echo.
-echo Do you want to delete the files in the Files directory? This will not delete the Base!
-echo.
+echo Do you want to delete the files in the Files directory? This will delete your Base,Rom, and Images!
 echo 1 = Yes
 echo 2 = No
 set /p DELDECIDE=[Your Choice:]
