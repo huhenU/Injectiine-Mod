@@ -1,11 +1,42 @@
-v1.23 [huhen-mod v01] (20/10/18)
--Fixed GBA option
--Added notes on which base to pick
--Added more information on base-picker
+v1-1.23 (22/10/18)
+-Added confirmation prompt when creating NDS-Injects
+-Fixed NDS-Injector
+-Added confirmation prompt when creating SNES-Inject
+-Added confirmation prompt when creating NES-Inject  
+-Added confirmation prompt when creating N64-Inject 
+-"Fixed" GBA-Injector
+-Fixed GBA-Injector again
+
+v0.1c-1.23 (21/10/18)
+-Fixed boring stuff in readme, that's it.
+And yes, this is getting a new release.
+Why?
+->Why not.
+
+Again, this might not even work without editing a config yet.
+
+v0.1b-1.23 (21/10/18)
+-Fixed Typo in Console selection
+-Fixed NES-Injection
+
+Again, this might not even work without editing a config yet.
+
+v0.1-1.23 (20/10/18)
+Initial release, having everything I wanted to implement in the first release. A list of these features can be found below:
+
+-Fixed GBA-Inject-option which would break when selecting a base
+-Added notes on when to pick which base
 -Revamped readme.txt
--Stopped it from deleting files when Inject finished
+-No file deletions after injecting anymore, so you don't lose your rom/image files
 -Added more information to make Injectiine easier to use for un-experienced users
 -Removed false information
+
+Keep in mind, that the NES-Injection may not work in this release. This is either a problem with my rom/base or Injectiine itself, but not my modded injector. I can surely say that, since I tried it on the unmodded Injector and I got the same error.
+A few more Bugs that are coming from Injectiine itself, are also not fixed in this release, but they were too minor for me to fix them here.
+That's why this is marked as a pre-release. If I get around to fixing these bugs, this will get it's first real release.
+
+I can say: Everything that worked in unmodded Injectiine still works in this one (at least when I did my testing good). If I did it bad, it won't even work without editing a config.
+
 
 v1.23 (18/12/17)
 -Added option to use custom backgrounds for GamePad/TV (NDS only)
