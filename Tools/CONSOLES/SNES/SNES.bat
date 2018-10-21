@@ -359,25 +359,23 @@ cd ..
 cd ..
 cd ..
 cd Files
-IF EXIST iconTex.png (move iconTex.png ../Tools/png2tga)
+IF EXIST iconTex.png (copy iconTex.png ../Tools/png2tga)
 IF NOT EXIST bootDrcTex.png (copy bootTvTex.png bootDrcTex.png)
-IF EXIST bootTvTex.png (move bootTvTex.png ../Tools/png2tga)
-IF EXIST bootDrcTex.png (move bootDrcTex.png ../Tools/png2tga)
-IF EXIST bootLogoTex.png (move bootLogoTex.png ../Tools/png2tga)
+IF EXIST bootTvTex.png (copy bootTvTex.png ../Tools/png2tga)
+IF EXIST bootDrcTex.png (copy bootDrcTex.png ../Tools/png2tga)
+IF EXIST bootLogoTex.png (copy bootLogoTex.png ../Tools/png2tga)
 
 IF EXIST bootSound.wav echo bootSound detected. Do you want it to loop?
 IF EXIST bootSound.wav set /p AUDIODECIDE=[Y/N:]
 IF /i "%AUDIODECIDE%"=="n" set LOOP=-noLoop
 IF EXIST bootSound.wav ..\Tools\sox\sox.exe .\bootSound.wav -b 16 bootEdited.wav channels 2 rate 48k trim 0 6
 IF EXIST bootEdited.wav ..\Tools\wav2btsnd.jar -in bootEdited.wav -out bootSound.btsnd %LOOP%
-IF EXIST bootSound.wav (2>NUL del bootSound.wav)
-IF EXIST bootEdited.wav (2>NUL del bootEdited.wav)
-IF EXIST bootSound.btsnd (move bootSound.btsnd ../Tools/CONSOLES/NES/WORKDIR/meta/bootSound.btsnd)
+IF EXIST bootSound.btsnd (copy bootSound.btsnd ../Tools/CONSOLES/NES/WORKDIR/meta/bootSound.btsnd)
 
-2>NUL ren *.smc ROM.sfc
-2>NUL ren *.sfc ROM.sfc
+2>NUL copy *.smc ROM.sfc
+2>NUL copy *.sfc ROM.sfc
 cd ..
-move Files\ROM.sfc Tools\CONSOLES\SNES\Injector\ROM.sfc
+copy Files\ROM.sfc Tools\CONSOLES\SNES\Injector\ROM.sfc
 cd Tools
 cd CONSOLES
 cd SNES
@@ -390,7 +388,6 @@ IF NOT EXIST WUP-%BASEPDC%_new.rpx GOTO:InjectError
 del /f /q WUP-%BASEPDC%.rpx
 ren WUP-%BASEPDC%_new.rpx WUP-%BASEPDC%.rpx
 wiiurpxtool -c WUP-%BASEPDC%.rpx
-del /f /q ROM.sfc
 move WUP-%BASEPDC%.rpx ..\WORKDIR\code
 IF NOT EXIST ..\WORKDIR\code\WUP-%BASEPDC%.rpx GOTO:InjectError
 
@@ -670,7 +667,13 @@ IF /i "%PACKDECIDE%"=="n" echo "[SNES] %GAMENAME% [%PRODUCTCODE%]"
 echo in the Output directory with the injected game. You can install this using
 echo WUP Installer GX2.
 echo.
-echo Press any key to exit.
+echo Do you want to delete the files in the Files directory? This will delete your Base, Rom, and Images!
+echo.
+echo 1 = Yes
+echo 2 = Now
+set /p DELDECIDE=[YOUR CHOICE]
+IF %DELDECIDE%==1 GOTO:DELF
+IF %DELDECIDE%==2 GOTO:NDELF
 pause>NUL
 exit
 
@@ -761,5 +764,20 @@ echo.
 echo Internet connection test failed.
 echo.
 echo Aborting in five seconds.
+SLEEP 5
+exit
+
+:DELF
+cd ..\
+del /s /f /q Files\* 
+clear
+echo Closing in five seconds
+SLEEP 5
+exit
+
+:NDELF
+cd ..\
+del /s /f /q Files\ROM.sfc
+echo Closing in five seconds
 SLEEP 5
 exit
