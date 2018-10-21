@@ -5,11 +5,14 @@
 Injectiine is a Wii U VC batch injector by CatmanFan (Mod by huhen)
 
 ==PROCESS OF INJECTING==
-Step 1: Put your rom into the "Files" directory
-Step 2: Create/Get images for the game
+Step 1: Create a folder named "Files" in the same directory as the "Injectiine" file
+Step 2: Put your rom into the "Files" directory
+Step 3: Create/Get images for the game
 	-bootTvTex.png (banner when the game starts)     [1280x720]
 	-iconTex.png (icon of the game in the home menu) [128x128]
-Step 3: Open the Injectiine file and follow the instructions
+		-> Put them into the "Files" directory
+
+Step 4: Open the Injectiine file and follow the instructions
 
 	In case you are trying to inject a game, but no base is good for it, you can use a custom base:
 		-Dump a VC-Game of the console you want to inject
