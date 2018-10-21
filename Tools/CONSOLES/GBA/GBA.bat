@@ -252,7 +252,7 @@ IF EXIST bootSound.btsnd (copy bootSound.btsnd ../Tools/CONSOLES/NES/WORKDIR/met
 
 copy *.gba ROM.gba
 cd ..
-move Files\ROM.gba Tools\CONSOLES\GBA\Injector\ROM.gba
+copy Files\ROM.gba Tools\CONSOLES\GBA\Injector\ROM.gba
 cd Tools
 cd CONSOLES
 cd GBA
@@ -260,9 +260,6 @@ move WORKDIR\content\alldata.bin Injector\alldata.bin
 move WORKDIR\content\alldata.psb.m Injector\alldata.psb.m
 cd Injector
 "C:\Python34\python" "inject_gba\inject_gba.py" --inpsb "alldata.psb.m" --inrom "ROM.gba" --outpsb "out/alldata.psb.m"
-del /f /q ROM.gba
-del /f /q alldata.bin
-del /f /q alldata.psb.m
 move out\alldata.bin ..\WORKDIR\content\alldata.bin
 move out\alldata.psb.m ..\WORKDIR\content\alldata.psb.m
 cls
@@ -475,23 +472,19 @@ png2tgacmd.exe -i iconTex.png --width=128 --height=128 --tga-bpp=32 --tga-compre
 png2tgacmd.exe -i bootTvTex.png --width=1280 --height=720 --tga-bpp=24 --tga-compression=none
 png2tgacmd.exe -i bootDrcTex.png --width=854 --height=480 --tga-bpp=24 --tga-compression=none
 IF EXIST bootLogoTex.png (png2tgacmd.exe -i bootLogoTex.png --width=170 --height=42 --tga-bpp=32 --tga-compression=none)
-title Injectiine [GBA]
-del /f /q iconTex.png
-del /f /q bootTvTex.png
-del /f /q bootDrcTex.png
-del /f /q bootLogoTex.png
+title Injectiine [GBA] - Mod
 MetaVerifiy.py
 cls
 echo Moving images to meta folder...
-move iconTex.tga ..\CONSOLES\GBA\WORKDIR\meta
-move bootTvTex.tga ..\CONSOLES\GBA\WORKDIR\meta
-move bootDrcTex.tga ..\CONSOLES\GBA\WORKDIR\meta
-2>NUL move bootLogoTex.tga ..\CONSOLES\GBA\WORKDIR\meta
+copy iconTex.tga ..\CONSOLES\GBA\WORKDIR\meta
+copy bootTvTex.tga ..\CONSOLES\GBA\WORKDIR\meta
+copy bootDrcTex.tga ..\CONSOLES\GBA\WORKDIR\meta
+2>NUL copy bootLogoTex.tga ..\CONSOLES\GBA\WORKDIR\meta
 cls
 
 :PackPrompt
 cls
-echo Do you want to pack the game using NUSPacker?
+echo Do you want to pack the game using NUSPacker? This is recommended if you want to install it to your Wii U.
 echo If you don't wish to, the game will be created in Loadiine format.
 set /p PACKDECIDE=[Y/N:] 
 IF /i "%PACKDECIDE%"=="n" (GOTO:LoadiinePack)
@@ -517,7 +510,7 @@ java -jar NUSPacker.jar -in WORKDIR -out "[GBA] %GAMENAME% (000500001337%TITLEID
 rd /s /q tmp
 rd /s /q WORKDIR
 rd /s /q output
-move "[GBA] %GAMENAME% (000500001337%TITLEID%)" ..\..\..\..\Output
+copy "[GBA] %GAMENAME% (000500001337%TITLEID%)" ..\..\..\..\Output
 
 :: Final check if game exists
 :FinalCheck
@@ -540,9 +533,7 @@ echo A folder has been created named
 IF /i "%PACKDECIDE%"=="y" echo "[GBA] %GAMENAME% (000500001337%TITLEID%)"
 IF /i "%PACKDECIDE%"=="n" echo "[GBA] %GAMENAME% [%PRODUCTCODE%]"
 echo in the Output directory with the injected game. You can install this using
-echo WUP Installer GX2, WUP Installer Y Mod or System Config Tool.
-echo.
-echo It is recommended to install to USB in case of game corruption.
+echo WUP Installer GX2.
 echo.
 echo Press any key to exit.
 pause>NUL
